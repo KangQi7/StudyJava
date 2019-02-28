@@ -1,20 +1,18 @@
-import javax.sound.midi.VoiceStatus;
-import java.text.*;
-import java.util.*;
+import Array.Array;
+import Array.ArrayStudy;
 
 public class HelloWorld {
     public static void main(String[] args){
-        try {
-            HelloWorld helloWorld = new HelloWorld();
-            helloWorld.methodA(1);
+        Array arr = new Array(20);
+        for (int i = 0; i< 10 ;i++){
+            arr.addLast(i);
         }
-        catch (SpecialException e){
+        System.out.println(arr);
 
-        }
-    }
+        arr.add(1,100);
+        System.out.println(arr);
 
-    public void methodA(int money) throws SpecialException{
-        if (--money <= 0) throw new SpecialException("out");
-        System.out.println("methodA");
+        arr.addFirst(-1);
+        System.out.println(arr);
     }
 }
