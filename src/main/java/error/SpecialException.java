@@ -1,4 +1,4 @@
-package Error;
+package error;
 
 public class SpecialException extends Exception {
     public SpecialException() {
