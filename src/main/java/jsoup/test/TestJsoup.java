@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TestJsoup {
     public Document getDocument(String homePage){
@@ -43,34 +45,11 @@ public class TestJsoup {
     public static void testGetShopInfo() throws IOException {
         long time1 = System.currentTimeMillis();
         File file = new File("C:\\Users\\Administrator\\Desktop\\微信端店铺信息.txt");
-        String keyword = "华为mate20pro";
+
         Document doc = Jsoup.parse(file,"utf-8","");
-        Elements elements = doc.getElementById("J_goodsList").select("li[class=gl-item]");
-        int i = 0;
-        for (Element element : elements) {
-            //非自营
-            boolean notZy = element.select("i[class=goods-icons J-picon-tips J-picon-fix]").isEmpty();
-            //非广告
-            boolean notAd = element.select("span[class=p-promo-flag]").isEmpty();
-            if (notZy && notAd) {
-                //如果商品名含有手机配件的关键字，则跳过这一商品
-                String priceStr = element.select("strong:has(em) > i").first().text();
 
-                String skuName = element.select("a > em").first().text();
-                if (!checkWarePrice(priceStr) || !checkWareName(skuName, keyword))
-                    continue;
-                String skuId = element.attr("data-sku");
-                String spuId = element.attr("data-spu");
-                String shopUrl = element.select("a[class=curr-shop]").attr("href");
-            }
-        }
-
-
-//        Document document = Jsoup.parse(file,"utf-8","");
-//        Elements elements1 = document.select("div[class=Ptable-item]").select("dl[class=clearfix]");
-//        int videoCount = elements1.size();
-//        long time2 = System.currentTimeMillis();
-//        System.out.println("jsoupTime:" + (time2 - time1));
+        String s = doc.select("div[class=follow J-follow-shop]").first().attr("data-vid");
+        System.out.println(s);
     }
 
     private static boolean checkWarePrice(String priceStr){
@@ -87,9 +66,9 @@ public class TestJsoup {
     }
 
     private static boolean checkWareName(String skuName, String keyword) {
-        String keywordEn = keyword.replaceAll("\\W","").toLowerCase();
+        String keywordEn = keyword.replaceAll("[^A-Za-z0-9_+]","").toLowerCase();
         //去除商品名中的非英文、数字字符
-        String skuNameEn = skuName.replaceAll("\\W","").toLowerCase();
+        String skuNameEn = skuName.replaceAll("[^A-Za-z0-9_+]","").toLowerCase();
         if(skuNameEn.contains(keywordEn))
             return true;
         else
