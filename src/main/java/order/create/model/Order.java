@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class Order {
     //订单总金额
-    BigDecimal total;
+    BigDecimal amount;
 
     //订单明细
     List<OrderDetail> details;
