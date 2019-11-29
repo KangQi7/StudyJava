@@ -1,10 +1,12 @@
 package jsoup.test.skuQuestion;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
+@Builder
 public class SkuQuestion {
 //    private int id;
 //
@@ -20,15 +22,15 @@ public class SkuQuestion {
 //
 //    private int praiseCount;
 
-    private int answerCount;
+    private Long answerCount;
 //
 //    private int anonymous;
-//
-//    private String expire;
+
+    private String expire;
 //
 //    private int top;
-//
-//    private String created;
+
+    private String created;
 //
 //    private String modified;
 //
