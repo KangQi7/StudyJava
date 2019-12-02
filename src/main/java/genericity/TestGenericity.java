@@ -1,11 +1,11 @@
 package genericity;
 
-import array.Array;
 import jsoup.test.skuQuestion.JdSkuQuestionModel;
 import jsoup.test.skuQuestion.SkuInfo;
 import jsoup.test.skuQuestion.SkuQuestion;
 import org.junit.Test;
 
+import javax.lang.model.type.ReferenceType;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -19,10 +19,11 @@ public class TestGenericity {
     /**
      * 敏感字段
      */
-    private static final List<String> SENSITIVE_FIELDS = Arrays.asList("brandName", "expire",
-            "encrypt_number", "resultCode", "questionList", "customerName"
+    private static final List<String> SENSITIVE_FIELDS = Arrays.asList("expire",
+            "encrypt_number", "resultCode", "questionList", "customerName","skus"
     );
-    private static List<Type> notTypes = Arrays.asList(String.class, Integer.class, Long.class, Date.class,
+    //
+    private static List<Type> types = Arrays.asList(String.class,Integer.class, Long.class, Date.class,
             Map.class, HashMap.class,Dictionary.class,
             int.class, long.class, float.class, double.class, boolean.class, byte.class,char.class,short.class);
 
@@ -40,66 +41,120 @@ public class TestGenericity {
                 .skuInfo(SkuInfo.builder()
                         .brandId(2)
                         .id(2)
-                        .brandName("skuInfo2").build())
+                        .brandName("skuInfo1").build())
                 .skus(Arrays.asList("5s", "4s", "3s", "2s", "1s"))
                 .time(new Date())
                 .encrypt_number("111")
                 .build();
-        decryptObj(model, token);
+
+        JdSkuQuestionModel model2 = JdSkuQuestionModel.builder()
+                .totalItem(1)
+                .resultCode("code2")
+                .questionList(Arrays.asList(SkuQuestion.builder().answerCount(5L).expire("25e").created("5c").build(),
+                        SkuQuestion.builder().answerCount(4L).expire("24e").created("4c").build(),
+                        SkuQuestion.builder().answerCount(3L).expire("23e").created("3c").build(),
+                        SkuQuestion.builder().answerCount(2L).expire("22e").created("2c").build(),
+                        SkuQuestion.builder().answerCount(1L).expire("21e").created("1c").build()))
+                .skuInfo(SkuInfo.builder()
+                        .brandId(2)
+                        .id(2)
+                        .brandName("skuInfo2").build())
+                .skus(Arrays.asList("25s", "24s", "23s", "22s", "21s"))
+                .time(new Date())
+                .encrypt_number("2111")
+                .build();
+
+        List<JdSkuQuestionModel> models = Arrays.asList(model,model2);
+
+        decryptObject(models, token);
 
         System.out.println(model.getQuestionList());
     }
 
-    public static <T> void decryptObj(T obj, String token) {
-        Field[] fields = obj.getClass().getDeclaredFields();
+    public static <T> void decryptObj(T obj, String token){
+        if (obj instanceof List<?>) {
+            for (Object o : (List<?>) obj) {
+//                decryptObject(o , token);
+            }
+        }else {
+//            decryptObject(obj, token);
+        }
+    }
 
-        for (Field field : fields) {
-            //如果是数组，获取其类型并循环递归
-            if (field.getGenericType() instanceof ParameterizedType) {
-                ParameterizedType pt = (ParameterizedType) field.getGenericType();
-                //数组，且其类型不为基本类型、String或Integer等无需处理字段的类型
-                if (pt.getRawType().equals(List.class) && !notTypes.contains(pt.getActualTypeArguments()[0])) {
-                    try {
-                        field.setAccessible(true);
-                        List list = (List) field.get(obj);
-                        //循环
-                        for (Object _obj : list) {
-                            decryptObj(_obj, token);
+    public static <T> void decryptObject(T obj, String token) {
+        if(obj == null){
+            return;
+        }
+        //如果是数组类型，循环执行
+        if (obj instanceof List<?>) {
+            for (Object o : (List<?>) obj) {
+                decryptObject(o , token);
+            }
+        } else {
+            //1.判断obj类型，如果是无需处理的类型则直接返回
+            if (types.contains(obj.getClass())){
+                return;
+            }
+
+            //2.获取类型各字段进行操作
+            Field[] fields = obj.getClass().getDeclaredFields();
+
+            for (Field field : fields) {
+                //如果是数组，获取其类型并循环递归
+                if (field.getGenericType() instanceof ParameterizedType) {
+                    ParameterizedType pt = (ParameterizedType) field.getGenericType();
+                    //数组，且其类型不为基本类型、String或Integer等无需处理字段的类型
+                    if (pt.getRawType().equals(List.class) && !types.contains(pt.getActualTypeArguments()[0])) {
+                        try {
+                            field.setAccessible(true);
+                            decryptObject(field.get(obj), token);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
                         }
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                }
-//                else {
-//                    if (SENSITIVE_FIELDS.contains(field.getName())) {
-//                        //循环解密赋值，暂时不考虑，因为没有这种的加密数据
-//                    }
-//                }
-            } else {
-                //String类型，判断是否是加密字段，是则解密并赋值
-                if (field.getGenericType().equals(String.class)) {
-                    if (!SENSITIVE_FIELDS.contains(field.getName())) {
-                        continue;//不是则继续循环字段
-                    }
-                    try {
-                        field.setAccessible(true);
-                        String value = "999";//替代解密操作
-                        field.set(obj, value);
-                        //处理加密字段
-                        if (field.getName().startsWith("encrypt_")) {
-                            Field _field = obj.getClass().getDeclaredField(field.getName().replace("encrypt_", ""));
-                            _field.setAccessible(true);
-                            _field.set(obj, Long.parseLong(value));
+                    } else if(pt.getRawType().equals(List.class)
+                            && pt.getActualTypeArguments()[0].equals(String.class)
+                            && SENSITIVE_FIELDS.contains(field.getName())){
+                        try {
+                            field.setAccessible(true);
+                            List objList = (List)field.get(obj);
+                            List newList = new ArrayList();
+                            for (Object item:
+                                    objList) {
+                                item += "1";
+                                newList.add(item);
+                            }
+                            field.set(obj, newList);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
                         }
-                    } catch (IllegalAccessException | NoSuchFieldException e) {
-                        e.printStackTrace();
                     }
-                } else if (!notTypes.contains(field.getGenericType())) {
-                    try {
-                        field.setAccessible(true);
-                        decryptObj(field.get(obj), token);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                } else {
+                    //String类型，判断是否是加密字段，是则解密并赋值
+                    if (field.getGenericType().equals(String.class)) {
+                        if (!SENSITIVE_FIELDS.contains(field.getName())) {
+                            continue;//不是则继续循环字段
+                        }
+
+                        try {
+                            field.setAccessible(true);
+                            String value = field.get(obj).toString() + "1";
+                            field.set(obj, value);
+                            //处理加密字段
+                            if (field.getName().startsWith("encrypt_")) {
+                                Field _field = obj.getClass().getDeclaredField(field.getName().replace("encrypt_", ""));
+                                _field.setAccessible(true);
+                                _field.set(obj, Long.parseLong(value));
+                            }
+                        } catch (IllegalAccessException | NoSuchFieldException e) {
+                            e.printStackTrace();
+                        }
+                    } else if(!types.contains(field.getType())) {
+                        try {
+                            field.setAccessible(true);
+                            decryptObject(field.get(obj), token);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
