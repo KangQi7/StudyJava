@@ -8,28 +8,34 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.VariableElement;
 import javax.swing.text.StyledEditorKit;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class HelloWorld {
 
     public static void main(String[] args) {
-        String sms = ";s,";
-        Map<Integer, String> companyInfo = new HashMap<>();
-        companyInfo.put(54, "543");
-        String id = "54";
-        String company;
-        try {
-            company = companyInfo.get(Integer.parseInt(id));
-        } catch(NumberFormatException e){
-            company = null;
-        }
+        Long a = 12283L;
+        Long b = 12283L;
+        String message = "中间商";
+        String message1 = "123";
+        String message2 = "中间商1";
+        System.out.println(message.length() + "," + message1.length() + "," + message2.length());
+        if (a.equals(b))
+            System.out.println(System.currentTimeMillis() / 1000L + "." + createRandomNum(99999,10000));
+    }
 
-        System.out.println(company);
-        if (sms.contains(",") && sms.contains(";")) {
-            System.out.println("Success-1");
+    /**
+     * 在左闭右闭的区间内获取一个随机int值
+     * @param min
+     * @param max
+     * @return
+     */
+    private static Integer createRandomNum(Integer min, Integer max){
+        if (max < min){
+            Integer temp = min;
+            min = max;
+            max = temp;
         }
+        Random random = new Random(System.currentTimeMillis());
+        return random.nextInt(max - min + 1) + min;
     }
 }
