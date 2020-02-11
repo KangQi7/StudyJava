@@ -1,6 +1,7 @@
 package regex.test;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Test;
 import utils.RegexUtil;
 
 import javax.swing.*;
@@ -43,5 +44,19 @@ public class TestRegex {
         Map<String,String> map = new HashMap<String, String>();
         map.put("score1",score1);
         System.out.println(score1 + ";" + score2 + ";" + score3 + ";" + score4 + ";");
+    }
+
+    @Test
+    public void test(){
+        String json = "jQuery7634135([{\"categoryId\":\"670\",\"categoryName\":\"电脑、办公\",\"errorCode\":null,\"errorMsg\":null," +
+                "\"logo\":\"http:\\/\\/img30.360buyimg.com\\/popshop\\/jfs\\/t1462\\/114\\/1115719795\\/3998\\/3baf973c\\/55bb2ae7N64b6a259.png\"," +
+                "\"name\":\"英特尔京东自营旗舰店\",\"score\":null,\"success\":true,\"venderId\":\"1000000693\"}," +
+                "{\"categoryId\":\"670\",\"categoryName\":\"电脑、办公\",\"errorCode\":null,\"errorMsg\":null,\"logo\":" +
+                "\"http:\\/\\/img30.360buyimg.com\\/popshop\\/jfs\\/t1\\/78758\\/26\\/9067\\/6072\\/5d6f277aE8c6a8c0d\\/2a8da9a5cee904b0.jpg\"," +
+                "\"name\":\"AMD京东自营旗舰店\",\"score\":null,\"success\":true,\"venderId\":\"1000000706\"}])";
+        RegexUtil util = new RegexUtil();
+        json = util.GetMatchString(json, "^jQuery\\d{7}\\(", ".+", "\\)$");
+
+        System.out.println(json);
     }
 }
