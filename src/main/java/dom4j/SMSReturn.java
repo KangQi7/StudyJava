@@ -1,4 +1,4 @@
-package xml.test;
+package dom4j;
 
 import com.sun.scenario.effect.impl.prism.PrImage;
 import lombok.Data;

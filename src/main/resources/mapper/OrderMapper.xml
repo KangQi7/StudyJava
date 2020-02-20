@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 指明当前xml对应的Mapper -->
+<mapper namespace="mybatis.PopOrder">
+    <select id="orderCount" resultType="Integer">
+      select count(*) from yd_pop_order;
+    </select>
+</mapper>

@@ -1,4 +1,4 @@
-package jdjson.test;
+package jdjson;
 
 import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;

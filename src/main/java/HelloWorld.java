@@ -13,6 +13,17 @@ import java.util.*;
 public class HelloWorld {
 
     public static void main(String[] args) {
+
+        List<String> list = new ArrayList<>();
+        list.add("a");
+        list.add("b");
+
+        list.remove("a");
+        list.remove("a");
+
+        String s =String.format("https://item.m.jd.com/product/%s.html","123123");
+        System.out.println(s);
+
         Long a = 12283L;
         Long b = 12283L;
         String message = "中间商";

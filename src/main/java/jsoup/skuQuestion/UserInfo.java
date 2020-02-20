@@ -1,4 +1,4 @@
-package jsoup.test.skuQuestion;
+package jsoup.skuQuestion;
 
 import lombok.Data;
 

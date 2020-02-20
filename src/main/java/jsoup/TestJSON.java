@@ -1,11 +1,10 @@
-package jsoup.test;
+package jsoup;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import jsoup.test.skuQuestion.JdSkuQuestionModel;
+import jsoup.skuQuestion.JdSkuQuestionModel;
 import org.junit.Test;
 
-import javax.sound.midi.Soundbank;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

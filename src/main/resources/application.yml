@@ -1,0 +1,21 @@
+#设置提供的服务名
+spring:
+  application:
+    name: javademo-tyh-service-hotel
+  #配置数据库
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    db1:
+      url: jdbc:mysql://localhost:3306/jcloud_yunding_db_push?useUnicode=true&characterEncoding=utf8
+      username: root
+      password: 123
+      driver-class-name: com.mysql.jdbc.Driver
+    db2:
+      url: jdbc:mysql://localhost:3306/jpt_topic?useUnicode=true&characterEncoding=utf8
+      username: root
+      password: 123
+      driver-class-name: com.mysql.jdbc.Driver
+
+#设置自己启动的端口
+server:
+  port: 12000

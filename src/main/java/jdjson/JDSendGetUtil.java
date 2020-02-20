@@ -1,4 +1,4 @@
-package jdjson.test;
+package jdjson;
 
 
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -9,7 +9,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -149,7 +148,6 @@ public class JDSendGetUtil {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         try {
             CloseableHttpResponse response = httpclient.execute(request);
-
             if (response.getStatusLine().getStatusCode() == 200) {
                 responseStr = EntityUtils.toString(response.getEntity(), "utf-8");
             }

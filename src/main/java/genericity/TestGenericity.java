@@ -1,12 +1,10 @@
 package genericity;
 
-import jsoup.test.skuQuestion.JdSkuQuestionModel;
-import jsoup.test.skuQuestion.SkuInfo;
-import jsoup.test.skuQuestion.SkuQuestion;
+import jsoup.skuQuestion.JdSkuQuestionModel;
+import jsoup.skuQuestion.SkuInfo;
+import jsoup.skuQuestion.SkuQuestion;
 import org.junit.Test;
-import sun.security.krb5.internal.ktab.KeyTabInputStream;
 
-import javax.lang.model.type.ReferenceType;
 import java.lang.reflect.*;
 import java.math.BigDecimal;
 import java.util.*;

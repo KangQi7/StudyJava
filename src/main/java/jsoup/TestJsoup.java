@@ -1,20 +1,12 @@
-package jsoup.test;
+package jsoup;
 
-import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import regex.test.TestRegex;
-import utils.RegexUtil;
 
-import javax.lang.model.util.ElementScanner6;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class TestJsoup {
     public Document getDocument(String homePage){

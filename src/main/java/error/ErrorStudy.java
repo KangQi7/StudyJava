@@ -1,9 +1,18 @@
 package error;
 
+import org.jsoup.Connection;
+import org.junit.Test;
+
 public class ErrorStudy {
+    @Test
     public void TestError(){
         try {
             ErrorStudy errorStudy = new ErrorStudy();
+            // 测试对象的equals
+            ErrorStudy errorStudy1 = new ErrorStudy();
+            if (errorStudy.equals(errorStudy1)){
+                System.out.println("equals");
+            }
             errorStudy.methodA(2);
         }
         catch (SpecialException e){

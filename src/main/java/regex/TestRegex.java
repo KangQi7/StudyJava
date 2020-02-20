@@ -1,4 +1,4 @@
-package regex.test;
+package regex;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;

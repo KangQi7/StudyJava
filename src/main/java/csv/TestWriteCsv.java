@@ -1,6 +1,6 @@
-package csv.test;
+package csv;
 
-import jsoup.test.Student;
+import jsoup.Student;
 
 import java.util.ArrayList;
 import java.util.List;

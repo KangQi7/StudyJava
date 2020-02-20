@@ -1,4 +1,4 @@
-package jsoup.test;
+package jsoup;
 
 import lombok.Data;
 

@@ -16,6 +16,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 import org.omg.CORBA.PUBLIC_MEMBER;
+import utils.CommonUtil;
+import utils.RandomUtil;
 import utils.URLEncodeUtil;
 
 import javax.print.attribute.standard.PrinterURI;
@@ -88,14 +90,17 @@ public class CompeteGoods {
 
     @Test
     public void test(){
-        String keyword = "华为 手机";
-        String kwSearchGoodsUrl_1 = kwSearchGoodsUrl(keyword, "1", "");
-        //urlString = "https://search.jd.com/Search?keyword=%E6%99%BA%E6%85%A7%E5%B1%8F&enc=utf-8&suggest=2.his.0.0&pvid=3b4186f307684528a5b67f200298ccfd";
+//        String keyword = "华为 手机";
+//        String kwSearchGoodsUrl_1 = kwSearchGoodsUrl(keyword, "1", "");
+//        //urlString = "https://search.jd.com/Search?keyword=%E6%99%BA%E6%85%A7%E5%B1%8F&enc=utf-8&suggest=2.his.0.0&pvid=3b4186f307684528a5b67f200298ccfd";
+//
+//        String goodsSource1 = homePageGoods(kwSearchGoodsUrl_1, kwSearchGoodsUrl_1);
+//        List<KeywordSearch> keywordSearches = jdKwSearchJsoup(goodsSource1); //根据关键词搜索商品前三十条
+//        System.out.println(keywordSearches.size());
+//        System.out.println(goodsSource1);
 
-        String goodsSource1 = homePageGoods(kwSearchGoodsUrl_1, kwSearchGoodsUrl_1);
-        List<KeywordSearch> keywordSearches = jdKwSearchJsoup(goodsSource1); //根据关键词搜索商品前三十条
-        System.out.println(keywordSearches.size());
-        System.out.println(goodsSource1);
+        String comments = goodsCommentList("7050482", 1, true);
+        System.out.println(comments);
 //        if (keywordSearches.size() > 20) {      //判断搜索类型，看是否拿后三十条商品
 //            String kwSearchGoodsUrl_2 = kwSearchGoodsUrl(keyword, "2",
 //                    String.join(",", keywordSearches.stream().map(k -> k.getSkuID()).collect(Collectors.toList())));
@@ -135,6 +140,22 @@ public class CompeteGoods {
         return result;
     }
 
+    public String goodsCommentList(String skuId, int page, boolean detail){
+        HttpGet httpGet = new HttpGet(commentUrl(skuId, page, detail?0:6));
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(60000).setConnectionRequestTimeout(60000)
+                .setSocketTimeout(60000).build();
+        httpGet.setConfig(requestConfig);
+        httpGet.setHeader("accept", "*/*");
+        httpGet.setHeader("accept-language", "zh-CN,zh;q=0.8");
+//        httpGet.setHeader("authority","wq.jd.com");
+        httpGet.setHeader("user-agent", "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Mobile Safari/537.36");
+        httpGet.setHeader("referer", String.format("https://item.m.jd.com/product/{0}.html",skuId));
+
+        String result = getResult(httpGet);
+        return result;
+    }
+
     private String getResult(HttpUriRequest request) {
         String responseStr = null;
         CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -142,15 +163,6 @@ public class CompeteGoods {
             CloseableHttpResponse response = httpclient.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
                 responseStr = EntityUtils.toString(response.getEntity(), "utf-8");
-//                StringBuilder reMsgBuider = new StringBuilder();
-//                InputStream in = response.getEntity().getContent();
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-//                String msg = null;
-//                // 读取返回消息体
-//                while ((msg = reader.readLine()) != null) {
-//                    reMsgBuider.append(msg);
-//                }
-//                responseStr = reMsgBuider.toString();
             }
             response.close();
         } catch (Exception e) {
@@ -178,6 +190,30 @@ public class CompeteGoods {
                     "&tpl=1_M&show_items=" + skuIds;
         }
 
+        return result;
+    }
+
+    public String commentUrl(String productId,int pageId,int score) {
+        String result = "https://wq.jd.com/commodity/comment/getcommentlist?callback=skuJDEvalA" +
+//                "&version=v2" +
+                "&pagesize=10" +
+//                "&sceneval=2" +
+                "&skucomment=0" + //skucomment=1说明只看当前sku
+                "&score=" + score + //0则获取评论详情，6则不获取
+                "&sku=" + productId + //skuID
+                "&sorttype=1" + //排序type = 1表示按时间排倒序
+                "&page=" + pageId + //分页
+                "&t=0." + CommonUtil.getRandomNumberStr(RandomUtil.getRandomNumber(15,18));
+
+        String s= "https://wq.jd.com/commodity/comment/getcommentlist?callback=skuJDEvalA" +
+                "&version=v2" +
+                "&pagesize=10" +
+                "&sceneval=2" +
+                "&score=0" +
+                "&sku=7050482" +
+                "&sorttype=5" +
+                "&page=1" +
+                "&t=0.9009045702124276";
         return result;
     }
 

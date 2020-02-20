@@ -1,4 +1,4 @@
-package jdjson.test;
+package jdjson;
 
 import org.junit.Test;
 
