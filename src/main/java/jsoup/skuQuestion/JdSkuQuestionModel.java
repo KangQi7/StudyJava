@@ -24,4 +24,8 @@ public class JdSkuQuestionModel {
     private Date time;
 
     private Long number;
+
+    private String phone;
+
+    private String encrypt_phone;
 }

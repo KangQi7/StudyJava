@@ -5,6 +5,7 @@ import jsoup.skuQuestion.SkuInfo;
 import jsoup.skuQuestion.SkuQuestion;
 import org.junit.Test;
 
+import javax.security.auth.Subject;
 import java.lang.reflect.*;
 import java.math.BigDecimal;
 import java.util.*;
@@ -21,6 +22,7 @@ public class TestGenericity {
      */
     private static final List<String> SENSITIVE_FIELDS = Arrays.asList("expire",
             "encrypt_number", "resultCode", "questionList", "customerName", "brandName"
+            ,"phone"
     );
     /**
      * 不处理类型
@@ -58,6 +60,7 @@ public class TestGenericity {
                 .skus(Arrays.asList("5s", "4s", "3s", "2s", "1s"))
                 .time(new Date())
                 .encrypt_number("111")
+                .phone("123456&encrypt")
                 .build();
 
         JdSkuQuestionModel model2 = JdSkuQuestionModel.builder()
@@ -79,6 +82,8 @@ public class TestGenericity {
 
         List<JdSkuQuestionModel> models = Arrays.asList(model, model2);
 
+        decryptObject(models, token, true);
+
         List<Map> maps = new ArrayList<>();
         HashMap map1 = new HashMap();
         map1.put("brandName","name1");
@@ -97,6 +102,10 @@ public class TestGenericity {
         System.out.println(model.getQuestionList());
     }
 
+
+    public static <T> void decryptObject(T obj, String token) {
+        decryptObject(obj, token, false);
+    }
     /**
      * 解密object中的敏感字段
      *
@@ -104,7 +113,7 @@ public class TestGenericity {
      * @param token
      * @param <T>
      */
-    public static <T> void decryptObject(T obj, String token) {
+    public static <T> void decryptObject(T obj, String token, boolean hide) {
         if (obj == null) {
             return;
         }
@@ -117,7 +126,7 @@ public class TestGenericity {
             if (notTypes.contains(((List<?>) obj).get(0).getClass()))
                 return;
             for (Object o : (List<?>) obj) {
-                decryptObject(o, token);
+                decryptObject(o, token, hide);
             }
         } else if (obj instanceof Map){
             Iterator keys = ((Map) obj).keySet().iterator();
@@ -150,27 +159,46 @@ public class TestGenericity {
                         Object enValue = field.get(obj);//这里可能因字段值为null而报错，所以进行了非空判断
                         if (enValue != null) {
                             String value = decrypt(token, enValue.toString());//解密操作
-                            field.set(obj, value);
-                            //处理加密字段
-                            if (field.getName().startsWith("encrypt_")) {
-                                Field _field = obj.getClass().getDeclaredField(field.getName().replace("encrypt_", ""));
-                                _field.setAccessible(true);
-                                _field.set(obj, Long.parseLong(value));
+
+                            if (hide) {//隐藏明文操作
+                                value = hidePlaintext(field.getName(), value);
+                                try {
+                                    //保存密文的返回
+                                    Field _field = obj.getClass().getDeclaredField("encrypt_" + field.getName());
+                                    _field.setAccessible(true);
+                                    _field.set(obj, enValue);
+                                } catch(NoSuchFieldException e){
+
+                                }
                             }
+
+                            field.set(obj, value);
+//                            //处理加密字段
+//                            if (field.getName().startsWith("encrypt_")) {
+//                                Field _field = obj.getClass().getDeclaredField(field.getName().replace("encrypt_", ""));
+//                                _field.setAccessible(true);
+//                                _field.set(obj, Long.parseLong(value));
+//                            }
                         }
-                    } catch (IllegalAccessException | NoSuchFieldException e) {
+                    } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
                 } else if (!notTypes.contains(field.getType())) {
                     try {
                         field.setAccessible(true);
-                        decryptObject(field.get(obj), token);
+                        decryptObject(field.get(obj), token, hide);
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }
+    }
+
+    private static String hidePlaintext(String field, String plaintext) {
+        String str = plaintext;
+        str = str.substring(0, 1) + "***" + str.substring(1);
+        return str;
     }
 
     /**
