@@ -6,5 +6,6 @@
 public class TestGit {
     public void test(){
         String test = "测试环境新增1";
+        String test2 = "测试环境新增2";
     }
 }
