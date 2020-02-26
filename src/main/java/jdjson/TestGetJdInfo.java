@@ -1,6 +1,10 @@
 package jdjson;
 
+import org.apache.catalina.LifecycleState;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestGetJdInfo {
     @Test
@@ -12,7 +16,7 @@ public class TestGetJdInfo {
 //        String result = jdSendGetUtil.jsonSource_Referer(url);
 
 //        String url = "https://rms.shop.jd.com/json/pop/shopInfo.action?callback=jQuery6510986&ids=10173566%2C1000000127%2C166165%2C196522%2C646824%2C784932%2C672711%2C647334%2C647331%2C1000085868&_=1581320371123";
-        String url = "https://rms.shop.jd.com/json/pop/shopInfo.action?ids=1000000693,1000000706&callback=jQuery7634135&_=1581406132549";
+//        String url = "https://rms.shop.jd.com/json/pop/shopInfo.action?ids=1000000693,1000000706&callback=jQuery7634135&_=1581406132549";
 //        String url = "https://search.jd.com/shop_head.php?ids=10173566";
         //这2个地址只能获取venderId下的数据，不能获取shopId下的，所以还是不能满足条件
 
@@ -23,9 +27,22 @@ public class TestGetJdInfo {
 //        String url = "https://shop.m.jd.com/detail/detailInfo?shopId=674932";
 //        String url = "https://shop.m.jd.com/index/getShopTemplate.json?shopId=674932";
 
-        String result = jdSendGetUtil.pc_jsonSource(url);
+//        String result = jdSendGetUtil.pc_jsonSource(url);
 
 //        String result = jdSendGetUtil.jsonSource_Referer(url);
-        System.out.println(result);
+
+//        String url = "https://search.jd.com/Search?keyword=%E6%89%8B%E6%9C%BA&enc=utf-8&qrst=1&rt=1&stop=1&vt=2&click=0";
+//        String result = jdSendGetUtil.homePageGoods(url);
+//        System.out.println(result);
+        String str = "2";
+        List<String> list = new ArrayList<>();
+        list.add("b");
+        test(str,list);
+        System.out.println(str);
+    }
+
+    private void test(String str, List<String> list){
+        str = "1";
+        list.set(0, "a");
     }
 }

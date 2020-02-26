@@ -44,7 +44,7 @@ public class JDSendGetUtil {
         HttpGet httpGet = new HttpGet(url);
         //设置头部信息进行浏览器模拟行为
         setHeaderConverter.jdSetHeader(httpGet);
-        httpGet.setHeader("Referer", "https://search.jd.com/Search?keyword=ThinkPad&enc=utf-8&suggest=7.his.0.0&click=0");
+        httpGet.setHeader("Referer", "https://search.jd.com");
         String result = getResult(httpGet);
         return result;
     }
