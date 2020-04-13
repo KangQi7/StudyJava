@@ -159,5 +159,12 @@
             <artifactId>poi</artifactId>
             <version>3.17</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator 图片处理 -->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.8</version>
+        </dependency>
     </dependencies>
 </project>
