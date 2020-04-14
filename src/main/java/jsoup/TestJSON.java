@@ -48,8 +48,10 @@ public class TestJSON {
         String param = "{\"apiMethod\":\"jingdong.pop.order.get\",\"appJsonParams\":\"{\\\"optional_fields\\\":\\\"orderId,itemInfoList,consigneeInfo,invoiceEasyInfo,invoiceInfo,orderPayment,orderEndTime,paymentConfirmTime,taxFee,vatInfo,orderSellerPrice\\\",\\\"order_id\\\":106839092480,\\\"order_state\\\":null}\",\"optionalFields\":\"orderId,itemInfoList,consigneeInfo,invoiceEasyInfo,invoiceInfo,orderPayment,orderEndTime,paymentConfirmTime,taxFee,vatInfo,orderSellerPrice\",\"orderId\":108193779931,\"responseClass\":\"com.jd.open.api.sdk.response.order.PopOrderGetResponse\",\"sysParams\":{\"v\":\"2.0\",\"timestamp\":\"2019-12-27 09:35:56\"},\"timestamp\":\"2019-12-27 09:35:56\"}";
 
         try {
-            JSONObject obj = JSONObject.parseObject(jsonStr);
-            System.out.println(obj.size());
+//            JSONObject obj = JSONObject.parseObject(jsonStr);
+//            System.out.println(obj.size());
+
+            jsonStrToJava("{\"time\":\"2019-12-05 00:00:00\"}");
         } catch (JSONException e) {
             System.out.println("fail");
         }
