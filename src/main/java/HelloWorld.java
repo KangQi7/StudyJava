@@ -13,25 +13,7 @@ import java.util.*;
 public class HelloWorld {
 
     public static void main(String[] args) {
-
-        List<String> list = new ArrayList<>();
-        list.add("a");
-        list.add("b");
-
-        list.remove("a");
-        list.remove("a");
-
-        String s =String.format("https://item.m.jd.com/product/%s.html","123123");
-        System.out.println(s);
-
-        Long a = 12283L;
-        Long b = 12283L;
-        String message = "中间商";
-        String message1 = "123";
-        String message2 = "中间商1";
-        System.out.println(message.length() + "," + message1.length() + "," + message2.length());
-        if (a.equals(b))
-            System.out.println(System.currentTimeMillis() / 1000L + "." + createRandomNum(99999,10000));
+        List<Integer> integers = Arrays.asList(1,2,3,4,5);
     }
 
     /**
