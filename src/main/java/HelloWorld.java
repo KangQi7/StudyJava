@@ -1,24 +1,19 @@
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Random;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import order.create.OrderGenerationTool;
+import order.create.model.Bill;
+import order.create.model.Order;
+import order.create.model.OrderDetail;
+
+import javax.lang.model.SourceVersion;
+import javax.lang.model.element.VariableElement;
+import javax.swing.text.StyledEditorKit;
+import java.math.BigDecimal;
+import java.util.*;
 
 public class HelloWorld {
 
     public static void main(String[] args) {
-        String imageUrl = "http://omsproductionimg.yangkeduo.com/images/unknown/0/L6Bze4giRtmOG4K8rK2wenQ5VMkjx06a.jpg";
-        try {
-            BufferedImage image = ImageIO.read(new URL(imageUrl));
-            System.out.println(image.getWidth());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static Long test(Long total){
-        total = 10L;
-        return 0L;
+        List<Integer> integers = Arrays.asList(1,2,3,4,5);
     }
 
     /**
